@@ -77,9 +77,13 @@ const LearnerSubmissions = [
 ];
 
 function getLearnerData(course, ag, submissions) {
-  // here, we would process this data to achieve the desired result.
+  const result = [];
 
   // 1 Compare AssignmentGroup's course_id with the CourseInfo's id. If not match, throw an error (try/catch ???)
+
+  if (course.id !== ag.course_id) {
+    throw new Error("The input is invalid: Mismatch course_id");
+  }
 
   // 2. Iterate through the LearnerSubmissions, extract unique learner_id, use that as a value for id in the results's object
 
@@ -98,8 +102,6 @@ function getLearnerData(course, ag, submissions) {
   // 9. Use assignment_id as a property and learner score percentage as a value. Add them into the result's object
 
   // 10. grab score and point_possible from different assignments and calculate the total weighted average. Push that into the result's object.
-
-  const result = [];
 
   // const result = [
   //   {
