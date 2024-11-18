@@ -87,6 +87,18 @@ function getLearnerData(course, ag, submissions) {
 
   // 2. Iterate through the LearnerSubmissions, extract unique learner_id, use that as a value for id in the results's object
 
+  const idArr = [];
+  submissions.forEach((submission) => {
+    const learnerId = submission.learner_id;
+    idArr.push(learnerId);
+  });
+  const uniqueIdArr = [...new Set(idArr)];
+  uniqueIdArr.map((uniqueId) => {
+    const learnerObj = {};
+    learnerObj.id = uniqueId;
+    result.push(learnerObj);
+  });
+
   // 3. Grab the assignment_id (from LearnerSubmissions), loop through AssignmentGroup to get assignments with the same id, then
 
   // 4. Check the due date (due_at), if it's not due date yet, we don't have to do anything (continue or break???)
