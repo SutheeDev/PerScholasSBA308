@@ -87,21 +87,52 @@ function getLearnerData(course, ag, submissions) {
 
   // 2. Iterate through the LearnerSubmissions, extract unique learner_id, use that as a value for id in the results's object
 
-  const idArr = [];
-  submissions.forEach((submission) => {
-    const learnerId = submission.learner_id;
-    idArr.push(learnerId);
-  });
-  const uniqueIdArr = [...new Set(idArr)];
-  uniqueIdArr.map((uniqueId) => {
-    const learnerObj = {};
-    learnerObj.id = uniqueId;
-    result.push(learnerObj);
-  });
+  const extractLearnerId = (submissions) => {
+    const idArr = [];
+    submissions.forEach((submission) => {
+      const learnerId = submission.learner_id;
+      idArr.push(learnerId);
+    });
+    const uniqueIdArr = [...new Set(idArr)];
+    uniqueIdArr.map((uniqueId) => {
+      const learnerObj = {};
+      learnerObj.id = uniqueId;
+      result.push(learnerObj);
+    });
+  };
+  extractLearnerId(submissions);
 
-  // 3. Grab the assignment_id (from LearnerSubmissions), loop through AssignmentGroup to get assignments with the same id, then
+  // 3. Grab the assignment_id (from LearnerSubmissions), loop through AssignmentGroup to get assignments with the same id
 
-  // 4. Check the due date (due_at), if it's not due date yet, we don't have to do anything (continue or break???)
+  // for (let i = 0 ; i < submissions.length ; i++) {
+  for (let i = 0; i < 1; i++) {
+    const learnerId = submissions[i].learner_id;
+    const assignmentId = submissions[i].assignment_id;
+    const submitDate = submissions[i].submission.submitted_at;
+    let score = submissions[i].submission.score;
+    // console.log(learnerId, assignmentId, submitDate, score);
+
+    for (let j = 0; j < ag.assignments.length; j++) {
+      if (assignmentId === ag.assignments[j].id) {
+        const dueDate = ag.assignments[j].due_at;
+        const maxPoints = ag.assignments[j].points_possible;
+        // console.log(dueDate, maxPoints);
+
+        // 4. Check the due date (due_at), if it's not due date yet, we don't have to do anything (continue or break???)
+        let isLate = false;
+        const presentDate = new Date();
+        const submitDateStr = new Date(submitDate);
+        const dueDateStr = new Date(dueDate);
+        if (dueDateStr > presentDate) {
+          continue;
+        } else if (submitDateStr > dueDateStr) {
+          isLate = true;
+        }
+      } else {
+        continue;
+      }
+    }
+  }
 
   // 5. If pass due date, grab point_possible then check for potential error (0 or string. Try/catch ???)
 
@@ -135,7 +166,7 @@ function getLearnerData(course, ag, submissions) {
 
 const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 
-console.log(result);
+// console.log(result);
 
 // the ID of the learner for which this data has been collected
 // "id": number,
