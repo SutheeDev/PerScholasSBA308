@@ -8,13 +8,21 @@ Welcome to SBA308, a JavaScript-based project developed as part of a Per Scholas
 Calculate Weighted Averages:
 
 - Calculates the weighted average scores for learners based on assignments with varying weights and point totals.
-  Handle Late Submissions:
+
+Handle Late Submissions:
+
 - Deducts 10% of the possible points for late submissions.
-  Exclude Undue Assignments:
+
+Exclude Undue Assignments:
+
 - Ignores assignments that are not yet due.
-  Error Handling:
+
+Error Handling:
+
 - Detects and manages invalid data gracefully, such as mismatched course IDs and division by zero.
-  Data Validation:
+
+Data Validation:
+
 - Ensures that input data adheres to the expected structure and types.
 
 <br><br>
