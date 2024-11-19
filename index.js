@@ -134,12 +134,12 @@ function getLearnerData(course, ag, submissions) {
         // Calculate learner score percentage
         const assignmentScore = score / maxPoints;
         // Add score and assignmentId to result array
-        for (let k = 0; k < result.length; k++) {
-          if (learnerId === result[k].id) {
-            result[k][assignmentId] = assignmentScore;
+        for (const obj of result) {
+          if (learnerId === obj.id) {
+            obj[assignmentId] = assignmentScore;
             // Increment totalScore and maxScore
-            result[k].totalScore += score;
-            result[k].maxScore += maxPoints;
+            obj.totalScore += score;
+            obj.maxScore += maxPoints;
           } else {
             continue;
           }
@@ -186,7 +186,7 @@ Check requirement
 3. use string, number, and boolean
 4. use two if/else - done
 5. use try/catch
-6. two types of loop
+6. two types of loop - done
 7. one break or continue - done
 8. manipulate array and object - done
 9. use function
