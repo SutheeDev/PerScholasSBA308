@@ -79,14 +79,12 @@ const LearnerSubmissions = [
 function getLearnerData(course, ag, submissions) {
   const result = [];
 
-  // 1 Compare AssignmentGroup's course_id with the CourseInfo's id. If not match, throw an error (try/catch ???)
-
+  // Throw an error for course id mismatch
   if (course.id !== ag.course_id) {
-    throw new Error("The input is invalid: Mismatch course_id");
+    throw new Error("Error: Mismatch course_id");
   }
 
-  // 2. Iterate through the LearnerSubmissions, extract unique learner_id, use that as a value for id in the results's object
-
+  // Extract unique learner_id, push to the results's object
   const extractLearnerId = (submissions) => {
     const idArr = [];
     submissions.forEach((submission) => {
@@ -102,47 +100,50 @@ function getLearnerData(course, ag, submissions) {
   };
   extractLearnerId(submissions);
 
-  // 3. Grab the assignment_id (from LearnerSubmissions), loop through AssignmentGroup to get assignments with the same id
-
-  // for (let i = 0 ; i < submissions.length ; i++) {
-  for (let i = 0; i < 1; i++) {
+  // Loop through learnerSubmissions and assignments
+  for (let i = 0; i < submissions.length; i++) {
     const learnerId = submissions[i].learner_id;
     const assignmentId = submissions[i].assignment_id;
     const submitDate = submissions[i].submission.submitted_at;
     let score = submissions[i].submission.score;
-    // console.log(learnerId, assignmentId, submitDate, score);
 
     for (let j = 0; j < ag.assignments.length; j++) {
       if (assignmentId === ag.assignments[j].id) {
         const dueDate = ag.assignments[j].due_at;
         const maxPoints = ag.assignments[j].points_possible;
-        // console.log(dueDate, maxPoints);
+
+        // Check potential error for points_possible
+        if (isNaN(maxPoints) || maxPoints === 0) {
+          throw new Error("Error: Invlid points_possible");
+        }
 
         const presentDate = new Date();
         const submitDateStr = new Date(submitDate);
         const dueDateStr = new Date(dueDate);
 
-        // 4. If it's not due date yet, continue
+        // If it's not due date yet, continue
         if (dueDateStr > presentDate) {
           continue;
         }
-        // 5. If submit late, mark isLate as true
+        // If submit late, deduct points
         if (submitDateStr > dueDateStr) {
           score = score - (score * 10) / 100;
+        }
+        // Calculate learner score percentage
+        const assignmentScore = score / maxPoints;
+        // Add score and assignmentId to result array
+        for (let k = 0; k < result.length; k++) {
+          if (learnerId === result[k].id) {
+            result[k][assignmentId] = assignmentScore;
+          } else {
+            continue;
+          }
         }
       } else {
         continue;
       }
     }
   }
-
-  // 6. grab point_possible then check for potential error (0 or string. Try/catch ???)
-
-  // 7. Grab learner's score. Check isLate condition and deduct 10% from score if it's true.
-
-  // 8. Calculate learner score percentage (score / point_possible)
-
-  // 9. Use assignment_id as a property and learner score percentage as a value. Add them into the result's object
 
   // 10. grab score and point_possible from different assignments and calculate the total weighted average. Push that into the result's object.
 
@@ -166,7 +167,7 @@ function getLearnerData(course, ag, submissions) {
 
 const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 
-// console.log(result);
+console.log(result);
 
 // the ID of the learner for which this data has been collected
 // "id": number,
@@ -183,9 +184,9 @@ const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 // <assignment_id>: number,
 
 // if an assignment is not yet due, it should not be included in either
-// the average or the keyed dictionary of scores
+// the average or the keyed dictionary of scores //
 
-// If an AssignmentGroup does not belong to its course (mismatching course_id), your program should throw an error, letting the user know that the input was invalid. Similar data validation should occur elsewhere within the program.
+// If an AssignmentGroup does not belong to its course (mismatching course_id), your program should throw an error, letting the user know that the input was invalid. Similar data validation should occur elsewhere within the program. //
 
 // You should also account for potential errors in the data that your program receives. What if points_possible is 0? You cannot divide by zero. What if a value that you are expecting to be a number is instead a string?
 
