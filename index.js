@@ -179,29 +179,19 @@ const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 
 console.log(result);
 
-// the ID of the learner for which this data has been collected
-// "id": number,
-
-// the learner’s total, weighted average, in which assignments
-// with more points_possible should be counted for more
-// e.g. a learner with 50/100 on one assignment and 190/200 on another
-// would have a weighted average score of 240/300 = 80%.
-// "avg": number,
-
-// each assignment should have a key with its ID,
-// and the value associated with it should be the percentage that
-// the learner scored on the assignment (submission.score / points_possible)
-// <assignment_id>: number,
-
-// if an assignment is not yet due, it should not be included in either
-// the average or the keyed dictionary of scores //
-
-// If an AssignmentGroup does not belong to its course (mismatching course_id), your program should throw an error, letting the user know that the input was invalid. Similar data validation should occur elsewhere within the program. //
-
-// You should also account for potential errors in the data that your program receives. What if points_possible is 0? You cannot divide by zero. What if a value that you are expecting to be a number is instead a string?
-
-// Use try/catch and other logic to handle these types of errors gracefully.
-
-// If an assignment is not yet due, do not include it in the results or the average.
-
-// Additionally, if the learner’s submission is late (submitted_at is past due_at), deduct 10 percent of the total points possible from their score for that assignment.
+/*
+Check requirement
+1. let and const - done
+2. use operator - done
+3. use string, number, and boolean
+4. use two if/else - done
+5. use try/catch
+6. two types of loop
+7. one break or continue - done
+8. manipulate array and object - done
+9. use function
+10. outputs processed data as described - done
+11. no error - done
+12. commit - done
+13. include README 
+*/
