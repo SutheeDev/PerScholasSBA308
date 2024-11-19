@@ -76,6 +76,15 @@ const LearnerSubmissions = [
   },
 ];
 
+// Function to setup each learner object
+const setUpResult = (id) => {
+  const learnerObj = {};
+  learnerObj.id = id;
+  learnerObj.totalScore = 0;
+  learnerObj.maxScore = 0;
+  return learnerObj;
+};
+
 function getLearnerData(course, ag, submissions) {
   const result = [];
 
@@ -93,10 +102,7 @@ function getLearnerData(course, ag, submissions) {
     });
     const uniqueIdArr = [...new Set(idArr)];
     uniqueIdArr.map((uniqueId) => {
-      const learnerObj = {};
-      learnerObj.id = uniqueId;
-      learnerObj.totalScore = 0;
-      learnerObj.maxScore = 0;
+      const learnerObj = setUpResult(uniqueId);
       result.push(learnerObj);
     });
   };
@@ -195,7 +201,7 @@ Check requirement
 6. two types of loop - done
 7. one break or continue - done
 8. manipulate array and object - done
-9. use function
+9. use function - done
 10. outputs processed data as described - done
 11. no error - done
 12. commit - done
