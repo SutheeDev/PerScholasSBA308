@@ -102,75 +102,64 @@ function getLearnerData(course, ag, submissions) {
   };
   extractLearnerId(submissions);
 
-  // Loop through learnerSubmissions and assignments
-  for (let i = 0; i < submissions.length; i++) {
-    const learnerId = submissions[i].learner_id;
-    const assignmentId = submissions[i].assignment_id;
-    const submitDate = submissions[i].submission.submitted_at;
-    let score = submissions[i].submission.score;
+  try {
+    // Loop through learnerSubmissions and assignments
+    for (let i = 0; i < submissions.length; i++) {
+      const learnerId = submissions[i].learner_id;
+      const assignmentId = submissions[i].assignment_id;
+      const submitDate = submissions[i].submission.submitted_at;
+      let score = submissions[i].submission.score;
 
-    for (let j = 0; j < ag.assignments.length; j++) {
-      if (assignmentId === ag.assignments[j].id) {
-        const dueDate = ag.assignments[j].due_at;
-        const maxPoints = ag.assignments[j].points_possible;
+      for (let j = 0; j < ag.assignments.length; j++) {
+        if (assignmentId === ag.assignments[j].id) {
+          const dueDate = ag.assignments[j].due_at;
+          const maxPoints = ag.assignments[j].points_possible;
 
-        // Check potential error for points_possible
-        if (isNaN(maxPoints) || maxPoints === 0) {
-          throw new Error("Error: Invlid points_possible");
-        }
+          // Check potential error for points_possible
+          if (isNaN(maxPoints) || maxPoints === 0) {
+            throw new Error("Error: Invalid points_possible");
+          }
 
-        const presentDate = new Date();
-        const submitDateStr = new Date(submitDate);
-        const dueDateStr = new Date(dueDate);
+          const presentDate = new Date();
+          const submitDateStr = new Date(submitDate);
+          const dueDateStr = new Date(dueDate);
 
-        // If it's not due date yet, continue
-        if (dueDateStr > presentDate) {
-          continue;
-        }
-        // If submit late, deduct points
-        if (submitDateStr > dueDateStr) {
-          score = score - (score * 10) / 100;
-        }
-        // Calculate learner score percentage
-        const assignmentScore = score / maxPoints;
-        // Add score and assignmentId to result array
-        for (const obj of result) {
-          if (learnerId === obj.id) {
-            obj[assignmentId] = assignmentScore;
-            // Increment totalScore and maxScore
-            obj.totalScore += score;
-            obj.maxScore += maxPoints;
-          } else {
+          // If it's not due date yet, continue
+          if (dueDateStr > presentDate) {
             continue;
           }
+          // If submit late, deduct points
+          if (submitDateStr > dueDateStr) {
+            score = score - (score * 10) / 100;
+          }
+          // Calculate learner score percentage
+          const assignmentScore = score / maxPoints;
+          // Add score and assignmentId to result array
+          for (const obj of result) {
+            if (learnerId === obj.id) {
+              obj[assignmentId] = assignmentScore;
+              // Increment totalScore and maxScore
+              obj.totalScore += score;
+              obj.maxScore += maxPoints;
+            } else {
+              continue;
+            }
+          }
+        } else {
+          continue;
         }
-      } else {
-        continue;
       }
     }
+
+    // Calculate avg. and delete toatlScore and maxScore from obj array.
+    result.forEach((obj) => {
+      obj.avg = obj.totalScore / obj.maxScore;
+      delete obj.totalScore;
+      delete obj.maxScore;
+    });
+  } catch (error) {
+    throw new Error("Error: something went wrong");
   }
-
-  // Calculate avg. and delete toatlScore and maxScore from obj array.
-  result.forEach((obj) => {
-    obj.avg = obj.totalScore / obj.maxScore;
-    delete obj.totalScore;
-    delete obj.maxScore;
-  });
-
-  // const result = [
-  //   {
-  //     id: 125,
-  //     avg: 0.985, // (47 + 150) / (50 + 150)
-  //     1: 0.94, // 47 / 50
-  //     2: 1.0, // 150 / 150
-  //   },
-  //   {
-  //     id: 132,
-  //     avg: 0.82, // (39 + 125) / (50 + 150)
-  //     1: 0.78, // 39 / 50
-  //     2: 0.833, // late: (140 - 15) / 150
-  //   },
-  // ];
 
   return result;
 }
@@ -180,12 +169,29 @@ const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 console.log(result);
 
 /*
+  const result = [
+    {
+      id: 125,
+      avg: 0.985, // (47 + 150) / (50 + 150)
+      1: 0.94, // 47 / 50
+      2: 1.0, // 150 / 150
+    },
+    {
+      id: 132,
+      avg: 0.82, // (39 + 125) / (50 + 150)
+      1: 0.78, // 39 / 50
+      2: 0.833, // late: (140 - 15) / 150
+    },
+  ];
+*/
+
+/*
 Check requirement
 1. let and const - done
 2. use operator - done
 3. use string, number, and boolean
 4. use two if/else - done
-5. use try/catch
+5. use try/catch - done
 6. two types of loop - done
 7. one break or continue - done
 8. manipulate array and object - done
