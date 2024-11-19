@@ -95,6 +95,8 @@ function getLearnerData(course, ag, submissions) {
     uniqueIdArr.map((uniqueId) => {
       const learnerObj = {};
       learnerObj.id = uniqueId;
+      learnerObj.totalScore = 0;
+      learnerObj.maxScore = 0;
       result.push(learnerObj);
     });
   };
@@ -135,6 +137,9 @@ function getLearnerData(course, ag, submissions) {
         for (let k = 0; k < result.length; k++) {
           if (learnerId === result[k].id) {
             result[k][assignmentId] = assignmentScore;
+            // Increment totalScore and maxScore
+            result[k].totalScore += score;
+            result[k].maxScore += maxPoints;
           } else {
             continue;
           }
@@ -145,7 +150,12 @@ function getLearnerData(course, ag, submissions) {
     }
   }
 
-  // 10. grab score and point_possible from different assignments and calculate the total weighted average. Push that into the result's object.
+  // Calculate avg. and delete toatlScore and maxScore from obj array.
+  result.forEach((obj) => {
+    obj.avg = obj.totalScore / obj.maxScore;
+    delete obj.totalScore;
+    delete obj.maxScore;
+  });
 
   // const result = [
   //   {
