@@ -118,15 +118,17 @@ function getLearnerData(course, ag, submissions) {
         const maxPoints = ag.assignments[j].points_possible;
         // console.log(dueDate, maxPoints);
 
-        // 4. Check the due date (due_at), if it's not due date yet, we don't have to do anything (continue or break???)
-        let isLate = false;
         const presentDate = new Date();
         const submitDateStr = new Date(submitDate);
         const dueDateStr = new Date(dueDate);
+
+        // 4. If it's not due date yet, continue
         if (dueDateStr > presentDate) {
           continue;
-        } else if (submitDateStr > dueDateStr) {
-          isLate = true;
+        }
+        // 5. If submit late, mark isLate as true
+        if (submitDateStr > dueDateStr) {
+          score = score - (score * 10) / 100;
         }
       } else {
         continue;
@@ -134,9 +136,7 @@ function getLearnerData(course, ag, submissions) {
     }
   }
 
-  // 5. If pass due date, grab point_possible then check for potential error (0 or string. Try/catch ???)
-
-  // 6. Then, compare submitted_at with the due date to see if it's late. (mark with Boolean variable???)
+  // 6. grab point_possible then check for potential error (0 or string. Try/catch ???)
 
   // 7. Grab learner's score. Check isLate condition and deduct 10% from score if it's true.
 
