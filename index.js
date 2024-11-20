@@ -87,6 +87,7 @@ const setUpResult = (id) => {
 
 function getLearnerData(course, ag, submissions) {
   const result = [];
+  let isLate = false;
 
   // Throw an error for course id mismatch
   if (course.id !== ag.course_id) {
@@ -136,8 +137,12 @@ function getLearnerData(course, ag, submissions) {
           }
           // If submit late, deduct points
           if (submitDateStr > dueDateStr) {
+            isLate = true;
+          }
+          if (isLate) {
             score = score - (score * 10) / 100;
           }
+
           // Calculate learner score percentage
           const assignmentScore = score / maxPoints;
           // Add score and assignmentId to result array
@@ -195,7 +200,7 @@ console.log(result);
 Check requirement
 1. let and const - done
 2. use operator - done
-3. use string, number, and boolean
+3. use string, number, and boolean - done
 4. use two if/else - done
 5. use try/catch - done
 6. two types of loop - done
